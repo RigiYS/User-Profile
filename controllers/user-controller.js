@@ -1,4 +1,4 @@
-const e = require("express");
+const  e = require("express");
 const userModel = require("../models/user-model");
 const { error } = require("console");
 
@@ -24,4 +24,49 @@ const getUserById = async (req, res) => {
   }
 };
 
-module.exports = { getAllUsers, getUserById };
+const addUser = async (req, res) => {
+  try {
+    const newUserId = await userModel.adddUser(req.body)
+    res.status(200).json({id:newUserId, ...req.body})
+
+  } catch (error) {
+    res.status(500).json({message:'Error Insert Data', error})
+  }
+};
+
+const updateUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = req.body;
+    const updated = await userModel.updateUserById(id, user);
+
+    if (updated) {
+      res.status(200).json({ message: "User updated successfully" });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error updating user", error: err.message });
+  }
+};
+
+const deleteUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await userModel.deleteUserById(id);
+
+    if (deleted) {
+      res.status(200).json({ message: "User deleted successfully" });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error deleting user", error: err.message });
+  }
+};
+
+module.exports = { getAllUsers, getUserById, addUser, updateUserById, deleteUserById };
