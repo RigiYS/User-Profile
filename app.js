@@ -2,16 +2,14 @@ const express = require("express");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const userRouter = require("./routes/user-route");
-const userLoger = require("./middleware/user-logger")
-const userAuth = require("./middleware/user-auth")
+const userLogger = require("./middleware/user-logger")
 
 dotenv.config();
 const app = express();
 
 app.use(bodyParser.json());
 app.use("/api/users", userRouter);
-app.use(userLoger);
-app.use(userAuth);
+app.use(userLogger);
 
 const port = process.env.PORT;
 
